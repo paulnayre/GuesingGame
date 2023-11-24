@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="index.css">
+  <title>Number Guessing Game</title>
+</head>
+<body>
+  <section>
+    <div class="form-box">
+      <div class="form-value">
+        <h2>Number Guessing Game</h2>
+        <p>Guess a number between 1 and 10:</p>
+        <div class="inputbox">
+          <input type="number" id="userGuess" placeholder="Enter Your Guess" required>
+        </div>
+        <button type="button" onclick="checkGuess()">Submit Guess</button>
+        <p id="feedback"></p>
+        <p>Chances left: <span id="chances">3</span></p>
+        <button type="button" id="retryButton" onclick="retryGame()" disabled>Retry</button>
+      </div>
+    </div>
+  </section>
+
+   <script>
+    var secretNumber;
+    var chances;
+
+    function startGame() {
+      secretNumber = Math.floor(Math.random() * 10) + 1;
+      chances = 3;
+      document.getElementById('retryButton').disabled = true;
+      document.getElementById('feedback').innerHTML = '';
+    }
+
+    function checkGuess() {
+      var guess = document.getElementById('userGuess').value;
+      var feedback = document.getElementById('feedback');
+      
+      if (isNaN(guess) || guess < 1 || guess > 10) {
+        feedback.innerHTML = 'Please enter a valid number between 1 and 10.';
+        return;
+      }
+
+      chances--;
+
+      if (parseInt(guess) === secretNumber) {
+        feedback.innerHTML = 'Congratulations! You guessed the correct number.';
+        document.getElementById('retryButton').disabled = false;
+      } else {
+        var message = 'Incorrect!';
+
+        if (chances > 0) {
+          message += ' Try again. Chances left: ' + chances;
+
+          if (parseInt(guess) < secretNumber) {
+            message += ' The correct number is higher.';
+          } else {
+            message += ' The correct number is lower.';
+          }
+        } else {
+          message += ' The correct number was ' + secretNumber + '. You ran out of chances.';
+          document.getElementById('retryButton').disabled = false;
+        }
+
+        feedback.innerHTML = message;
+      }
+    }
+
+    function retryGame() {
+      startGame();
+      document.getElementById('userGuess').value = '';
+    }
+
+    startGame();
+  </script>
+
+</body>
+</html>
